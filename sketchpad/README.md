@@ -33,3 +33,6 @@ Transform the behavior of a square when interacting with the mouse by introducin
         Hint: The opacity CSS property is useful here. To learn how to use it, check this MDN docs article about the opacity CSS property.
 
 You can choose to do either one or both of these challenges, it’s up to you.
+
+!!!!!!!!!!!!!!!
+Completely forget to commit often. Remember to commit after every milestone next time!!!!
