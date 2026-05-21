@@ -8,7 +8,7 @@ let operator = null;
 const display = document.querySelector(".display input");
 const numbers = document.querySelectorAll(".numbers");
 const operators = document.querySelectorAll(".operators");
-const equals = document.querySelector(".equals");
+const equals = document.querySelector("#equals");
 const clear = document.querySelector(".clear");
 const backspace = document.querySelector(".backspace");
 // operate function for calculation
@@ -42,7 +42,7 @@ numbers.forEach((button) => button.addEventListener("click", numberPressed));
 //func for operator to appear and store the first number
 const operatorPressed = (event) => {
   const pressedOperator = event.target.textContent;
-  if (display.value !== "0") {
+  if (oldNumber === null && operator === null && newNumber != "0") {
     oldNumber = Number(display.value);
     operator = pressedOperator;
     display.value = `${oldNumber}${operator}`;
@@ -52,3 +52,16 @@ const operatorPressed = (event) => {
 operators.forEach((button) =>
   button.addEventListener("click", operatorPressed),
 );
+//func for equal to calculate using the three variable and return result as oldNumber
+const equalPressed = (event) => {
+  if (oldNumber !== null && operator !== null && newNumber != "0") {
+    let fNum = Number(oldNumber);
+    let sNum = Number(newNumber);
+    let op = operator;
+    oldNumber = operate(fNum, sNum, op);
+    display.value = `${oldNumber}`;
+    newNumber = "0";
+    operator = null;
+  }
+};
+equals.addEventListener("click", equalPressed);
