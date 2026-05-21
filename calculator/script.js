@@ -2,9 +2,16 @@ const add = (a, b) => a + b;
 const subtract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
-let firstNumber;
-let secondNumber;
-let operator;
+let oldNumber = null;
+let newNumber = "0";
+let operator = null;
+const display = document.querySelector(".display input");
+const numbers = document.querySelectorAll(".numbers");
+const operators = document.querySelectorAll(".operators");
+const equals = document.querySelector(".equals");
+const clear = document.querySelector(".clear");
+const backspace = document.querySelector(".backspace");
+// operate function for calculation
 const operate = (fNum, sNum, op) => {
   switch (op) {
     case "+":
@@ -21,3 +28,27 @@ const operate = (fNum, sNum, op) => {
       break;
   }
 };
+//func for numbers appear as they are pressed
+const numberPressed = (event) => {
+  const pressedNumber = event.target.textContent;
+  if (newNumber === "0") {
+    newNumber = pressedNumber;
+  } else {
+    newNumber += pressedNumber;
+  }
+  display.value = `${oldNumber === null ? "" : oldNumber}${operator === null ? "" : operator}${newNumber}`;
+};
+numbers.forEach((button) => button.addEventListener("click", numberPressed));
+//func for operator to appear and store the first number
+const operatorPressed = (event) => {
+  const pressedOperator = event.target.textContent;
+  if (display.value !== "0") {
+    oldNumber = Number(display.value);
+    operator = pressedOperator;
+    display.value = `${oldNumber}${operator}`;
+    newNumber = "0";
+  }
+};
+operators.forEach((button) =>
+  button.addEventListener("click", operatorPressed),
+);
