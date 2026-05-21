@@ -9,7 +9,7 @@ const display = document.querySelector(".display input");
 const numbers = document.querySelectorAll(".numbers");
 const operators = document.querySelectorAll(".operators");
 const equals = document.querySelector("#equals");
-const clear = document.querySelector(".clear");
+const clear = document.querySelector("#clear");
 const backspace = document.querySelector(".backspace");
 // operate function for calculation
 const operate = (fNum, sNum, op) => {
@@ -31,6 +31,9 @@ const operate = (fNum, sNum, op) => {
 //func for numbers appear as they are pressed
 const numberPressed = (event) => {
   const pressedNumber = event.target.textContent;
+  if (oldNumber !== null && operator == null && newNumber == "0")
+    // situation for pressing number when previous calculation just done and old result is on display
+    oldNumber = null;
   if (newNumber === "0") {
     newNumber = pressedNumber;
   } else {
@@ -42,26 +45,66 @@ numbers.forEach((button) => button.addEventListener("click", numberPressed));
 //func for operator to appear and store the first number
 const operatorPressed = (event) => {
   const pressedOperator = event.target.textContent;
-  if (oldNumber === null && operator === null && newNumber != "0") {
-    oldNumber = Number(display.value);
+  if (
+    oldNumber === null &&
+    operator === null &&
+    newNumber != "0"
+  ) // situation for inputting from default state
+  {
+    oldNumber = Number(newNumber);
+    newNumber = "0";
     operator = pressedOperator;
     display.value = `${oldNumber}${operator}`;
+  } else if (
+    oldNumber !== null &&
+    operator === null &&
+    newNumber == "0"
+  ) // situation for calculation with last result as oldNumber
+  {
     newNumber = "0";
+    operator = pressedOperator;
+    display.value = `${oldNumber}${operator}`;
+  } else if (
+    oldNumber !== null &&
+    operator !== null &&
+    newNumber != "0"
+  ) // situation for pressing operator when 3 variables are present
+  {
+    equalPressed();
+    newNumber = "0";
+    operator = pressedOperator;
+    display.value = `${oldNumber}${operator}`;
   }
 };
 operators.forEach((button) =>
   button.addEventListener("click", operatorPressed),
 );
-//func for equal to calculate using the three variable and return result as oldNumber
+//func for equal button to calculate using the three variables and return result as oldNumber
 const equalPressed = (event) => {
-  if (oldNumber !== null && operator !== null && newNumber != "0") {
+  if (oldNumber !== null && operator === "/" && newNumber === "0") {
+    display.value = `Error 404!`;
+    oldNumber = null;
+    newNumber = "0";
+    operator = null;
+  }
+  if (oldNumber !== null && operator !== null) {
     let fNum = Number(oldNumber);
     let sNum = Number(newNumber);
     let op = operator;
-    oldNumber = operate(fNum, sNum, op);
+    let rawResult = operate(fNum, sNum, op);
+    oldNumber = parseFloat(rawResult.toFixed(2));
     display.value = `${oldNumber}`;
     newNumber = "0";
     operator = null;
   }
 };
 equals.addEventListener("click", equalPressed);
+//func for clear button to clear the display and reset all variables
+const clearPressed = (event) => {
+  oldNumber = null;
+  newNumber = "0";
+  operator = null;
+  display.value = "0";
+};
+clear.addEventListener("click", clearPressed);
+//func for backspace button to remove the last character
