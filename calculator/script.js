@@ -212,3 +212,43 @@ const minusPressed = (event) => {
 };
 
 minus.addEventListener("click", minusPressed);
+//add keyboard support
+//func for keydown event
+const keydownHandler = (event) => {
+  const key = event.key;
+  // 1. for numbers
+  if (key >= "0" && key <= "9") {
+    numberPressed({ target: { textContent: key } });
+  } // 2. for operators except minus
+  if (key === "+" || key === "*" || key === "/") {
+    operatorPressed({ target: { textContent: key } });
+    return;
+  }
+  // 3. for minus
+  if (key === "-") {
+    minusPressed({ target: { textContent: key } });
+    return;
+  }
+  // 4. for separator
+  if (key === "." || key === ",") {
+    separatorPressed({ target: { textContent: "." } });
+    return;
+  }
+  // 5. for equal and enter
+  if (key === "Enter" || key === "=") {
+    event.preventDefault();
+    equalPressed();
+    return;
+  }
+  // 6. for backspace
+  if (key === "Backspace") {
+    backspacePressed();
+    return;
+  }
+  // 7. for escape
+  if (key === "Escape") {
+    clearPressed();
+    return;
+  }
+};
+window.addEventListener("keydown", keydownHandler);
