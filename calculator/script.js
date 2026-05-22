@@ -12,6 +12,7 @@ const equals = document.querySelector("#equals");
 const clear = document.querySelector("#clear");
 const backspace = document.querySelector("#backspace");
 const separator = document.querySelector("#separator");
+const minus = document.querySelector("#minus");
 // operate function for calculation
 const operate = (fNum, sNum, op) => {
   switch (op) {
@@ -46,7 +47,11 @@ numbers.forEach((button) => button.addEventListener("click", numberPressed));
 //func for operator to appear and store the first number
 const operatorPressed = (event) => {
   const pressedOperator = event.target.textContent;
-  if (
+  if (operator != null && newNumber === "0") // situation for replacing operator
+  {
+    operator = pressedOperator;
+    display.value = `${oldNumber}${operator}`;
+  } else if (
     oldNumber === null &&
     operator === null &&
     newNumber != "0"
@@ -87,10 +92,11 @@ const equalPressed = (event) => {
     oldNumber = null;
     newNumber = "0";
     operator = null;
+    return;
   }
   if (oldNumber !== null && operator !== null) {
     let fNum = Number(oldNumber);
-    let sNum = Number(newNumber);
+    let sNum = newNumber === "-" ? 0 : Number(newNumber);
     let op = operator;
     let rawResult = operate(fNum, sNum, op);
     oldNumber = parseFloat(rawResult.toFixed(2));
@@ -117,8 +123,8 @@ const backspacePressed = (event) => {
   ) // situation for when all three variables are present
   {
     newNumber = newNumber.slice(0, -1);
-    display.value = `${oldNumber}${operator}${newNumber}`;
-    if (newNumber === "") newNumber = "0";
+    if (newNumber === "" || newNumber === "-") newNumber = "0";
+    display.value = `${oldNumber}${operator}`;
   } else if (
     //situation for when only oldNumber and operator are present
     oldNumber !== null &&
@@ -175,3 +181,34 @@ const separatorPressed = (event) => {
   display.value = `${oldNumber === null ? "" : oldNumber}${operator === null ? "" : operator}${newNumber}`;
 };
 separator.addEventListener("click", separatorPressed);
+
+//func for minus button,dealing with entering negative values on top of normal operator function
+const minusPressed = (event) => {
+  const pressedOperator = event.target.textContent;
+  if (newNumber === "-") return;
+  if (operator !== null && newNumber === "0") {
+    newNumber = "-";
+    display.value = `${oldNumber}${operator}${newNumber}`;
+    return;
+  } else if (oldNumber === null && operator === null && newNumber === "0") {
+    newNumber = "-";
+    display.value = `${newNumber}`;
+    return;
+  } else if (oldNumber === null && operator === null && newNumber != "0") {
+    oldNumber = Number(newNumber);
+    newNumber = "0";
+    operator = pressedOperator;
+    display.value = `${oldNumber}${operator}`;
+  } else if (oldNumber !== null && operator === null && newNumber == "0") {
+    newNumber = "0";
+    operator = pressedOperator;
+    display.value = `${oldNumber}${operator}`;
+  } else if (oldNumber !== null && operator !== null && newNumber != "0") {
+    equalPressed();
+    newNumber = "0";
+    operator = pressedOperator;
+    display.value = `${oldNumber}${operator}`;
+  }
+};
+
+minus.addEventListener("click", minusPressed);

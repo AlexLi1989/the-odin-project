@@ -91,7 +91,7 @@ button:active {
   background-color: #d4d4d4;
 }
 
-.numbers {
+.numbers{
   background-color: #333333;
   color: #ffffff;
 }
@@ -100,11 +100,11 @@ button:active {
   background-color: #444444;
 }
 
-.operators, #equals {
+.operators, #equals, #minus {
   background-color: #ff9f0a;
   color: #ffffff;
 }
 
-.operators:hover, #equals:hover {
+.operators:hover, #equals:hover, #minus:hover {
   background-color: #f1a93c;
 }
