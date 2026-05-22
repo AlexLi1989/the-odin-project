@@ -10,7 +10,8 @@ const numbers = document.querySelectorAll(".numbers");
 const operators = document.querySelectorAll(".operators");
 const equals = document.querySelector("#equals");
 const clear = document.querySelector("#clear");
-const backspace = document.querySelector(".backspace");
+const backspace = document.querySelector("#backspace");
+const separator = document.querySelector("#separator");
 // operate function for calculation
 const operate = (fNum, sNum, op) => {
   switch (op) {
@@ -108,3 +109,44 @@ const clearPressed = (event) => {
 };
 clear.addEventListener("click", clearPressed);
 //func for backspace button to remove the last character
+const backspacePressed = (event) => {
+  if (
+    oldNumber !== null &&
+    operator !== null &&
+    newNumber != "0"
+  ) // situation for when all three variables are present
+  {
+    newNumber = newNumber.slice(0, -1);
+    display.value = `${oldNumber}${operator}${newNumber}`;
+    if (newNumber === "") newNumber = "0";
+  } else if (
+    //situation for when only oldNumber and operator are present
+    oldNumber !== null &&
+    operator !== null &&
+    newNumber === "0"
+  ) {
+    operator = null;
+    newNumber = String(oldNumber);
+    oldNumber = null;
+    display.value = `${newNumber}`;
+  } else if (
+    //situation for when only oldNumber is present
+    oldNumber !== null &&
+    operator === null &&
+    newNumber === "0"
+  ) {
+    oldNumber = oldNumber.slice(0, -1);
+    display.value = `${oldNumber}`;
+    if (oldNumber === "") oldNumber = "0";
+  } else if (
+    //situation for when only newNumber is present
+    oldNumber === null &&
+    operator === null &&
+    newNumber !== "0"
+  ) {
+    newNumber = newNumber.slice(0, -1);
+    display.value = `${newNumber}`;
+    if (newNumber === "") newNumber = "0";
+  }
+};
+backspace.addEventListener("click", backspacePressed);

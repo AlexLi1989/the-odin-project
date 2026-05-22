@@ -10,7 +10,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f0f2f5;
+  background-color: #c6c8ca;
 }
 
 .calculator {
@@ -60,7 +60,7 @@ body {
   gap: 12px;
 }
 
-#zero { grid-column: span 3; }
+#zero { grid-column: span 2; }
 
 .operators-container {
   display: flex;
@@ -87,7 +87,7 @@ button:active {
   color: #000000;
 }
 
-.functions:hover {
+.functions:hover  {
   background-color: #d4d4d4;
 }
 
