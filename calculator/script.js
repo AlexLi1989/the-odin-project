@@ -230,8 +230,8 @@ const keydownHandler = (event) => {
     return;
   }
   // 4. for separator
-  if (key === "." || key === ",") {
-    separatorPressed({ target: { textContent: "." } });
+  if (key === ".") {
+    separatorPressed({ target: { textContent: key } });
     return;
   }
   // 5. for equal and enter
