@@ -87,16 +87,16 @@ operators.forEach((button) =>
 );
 //func for equal button to calculate using the three variables and return result as oldNumber
 const equalPressed = (event) => {
-  if (oldNumber !== null && operator === "/" && newNumber === "0") {
-    display.value = `Error 404!`;
-    oldNumber = null;
-    newNumber = "0";
-    operator = null;
-    return;
-  }
   if (oldNumber !== null && operator !== null) {
     let fNum = Number(oldNumber);
-    let sNum = newNumber === "-" ? 0 : Number(newNumber);
+    let sNum = newNumber === "-" || newNumber === "-." ? 0 : Number(newNumber);
+    if (operator === "/" && sNum === 0) {
+      display.value = `Error 404! XD`;
+      oldNumber = null;
+      newNumber = "0";
+      operator = null;
+      return;
+    }
     let op = operator;
     let rawResult = operate(fNum, sNum, op);
     oldNumber = parseFloat(rawResult.toFixed(2));
