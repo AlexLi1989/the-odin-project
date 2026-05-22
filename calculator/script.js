@@ -135,9 +135,15 @@ const backspacePressed = (event) => {
     operator === null &&
     newNumber === "0"
   ) {
-    oldNumber = oldNumber.slice(0, -1);
-    display.value = `${oldNumber}`;
-    if (oldNumber === "") oldNumber = "0";
+    let oldStr = String(oldNumber).slice(0, -1);
+    if (oldStr === "" || oldStr === "-") {
+      oldNumber = null;
+      newNumber = "0";
+      display.value = "0";
+    } else {
+      oldNumber = Number(oldStr);
+      display.value = `${oldNumber}`;
+    }
   } else if (
     //situation for when only newNumber is present
     oldNumber === null &&
@@ -150,3 +156,22 @@ const backspacePressed = (event) => {
   }
 };
 backspace.addEventListener("click", backspacePressed);
+
+//func for separator
+const separatorPressed = (event) => {
+  const sep = event.target.textContent;
+  if (oldNumber !== null && operator === null && newNumber === "0") {
+    oldNumber = null;
+    newNumber = "0" + sep;
+    display.value = `${newNumber}`;
+    return;
+  }
+  if (newNumber.includes(sep)) return;
+  if (newNumber === "0" || newNumber === "") {
+    newNumber = "0" + sep;
+  } else {
+    newNumber += sep;
+  }
+  display.value = `${oldNumber === null ? "" : oldNumber}${operator === null ? "" : operator}${newNumber}`;
+};
+separator.addEventListener("click", separatorPressed);

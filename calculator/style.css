@@ -82,12 +82,12 @@ button:active {
   opacity: 0.8;
 }
 
-.functions {
+.functions, #separator {
   background-color: #a5a5a5;
   color: #000000;
 }
 
-.functions:hover  {
+.functions:hover , #separator:hover {
   background-color: #d4d4d4;
 }
 
