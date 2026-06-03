@@ -45,7 +45,7 @@
           </p>
           <p>Sign up with your email and password to get started!</p>
         </div>
-        <form action="" method="">
+        <form action="" method="" id="contact">
           <div class="input-container">
             <h2>Let's do this!</h2>
             <div class="form-group">
@@ -98,18 +98,13 @@
             </div>
 
             <div class="form-group">
-              <label for="phoneNumber"
-                >PHONE NUMBER<span class="required-sign"
-                  ><sup>*</sup></span
-                ></label
-              >
+              <label for="phoneNumber">PHONE NUMBER</label>
               <input
                 type="tel"
                 id="phoneNumber"
                 name="phoneNumber"
                 autocomplete="tel"
                 pattern="[0-9]{8}"
-                required
               />
               <p class="fine-print">8 characters</p>
               <p class="help">Please enter your phone number.</p>
@@ -123,11 +118,12 @@
                 id="password"
                 name="password"
                 autocomplete="new-password"
-                pattern="(?=.*[A-Z]).{8,}"
+                pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 required
               />
               <p class="fine-print">
-                Must contain at least 8 characters and one uppercase letter
+                At least 8 characters containing one uppercase letter and one
+                lowercase letter.
               </p>
               <p class="help">Please enter valid password.</p>
             </div>
