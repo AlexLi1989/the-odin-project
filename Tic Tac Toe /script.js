@@ -69,9 +69,19 @@ const gameController = (function createController() {
   let currentPlayer = player1;
   let isGameOver = false;
 
+  //method for getting players
+  function getPlayers() {
+    return [player1, player2];
+  }
+
   //method for switching current player
   function switchPlayer() {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
+  }
+
+  //method for getting current player
+  function getCurrentPlayer() {
+    return currentPlayer;
   }
 
   //method for checking win condition
@@ -142,5 +152,61 @@ const gameController = (function createController() {
   }
   return {
     playRound,
+    getPlayers,
+    getCurrentPlayer,
   };
+})();
+
+//iife to create screen controller
+const screenController = (function createScreenController() {
+  const screenBoard = document.querySelector(".board");
+  const player1NameDisplay = document.querySelector(".player-1-card h2 span");
+  const player1ScoreDisplay = document.querySelector(".player-1-card p span");
+  const player2NameDisplay = document.querySelector(".player-2-card h2 span");
+  const player2ScoreDisplay = document.querySelector(".player-2-card p span");
+  const currentPlayerDisplay = document.querySelector(
+    ".current-player h3 span",
+  );
+  const warning = document.querySelector(".warning p");
+  const result = document.querySelector(".result p");
+
+  //method to update score board
+  function updateScoreBoard() {
+    const players = gameController.getPlayers();
+    const activePlayer = gameController.getCurrentPlayer();
+    player1NameDisplay.textContent = players[0].name;
+    player1ScoreDisplay.textContent = players[0].getScore();
+    player2NameDisplay.textContent = players[1].name;
+    player2ScoreDisplay.textContent = players[1].getScore();
+    currentPlayerDisplay.textContent = activePlayer.name;
+  }
+
+  //method to render visual game board
+  function updateScreen() {
+    const currentBoard = gameBoard.getBoardState();
+    screenBoard.innerHTML = "";
+    currentBoard.flat().forEach((value, index) => {
+      const cell = document.createElement("button");
+      cell.classList.add("cell");
+      cell.textContent = value;
+      cell.dataset.row = Math.floor(index / 3);
+      cell.dataset.col = index % 3;
+      screenBoard.appendChild(cell);
+    });
+  }
+  //method for handling player click
+  function clickHandler(event) {
+    const clickedCell = event.target;
+    if (!clickedCell.classList.contains("cell")) return;
+    const row = parseInt(clickedCell.dataset.row);
+    const col = parseInt(clickedCell.dataset.col);
+
+    //run play round method
+    gameController.playRound(row, col);
+    updateScreen();
+    updateScoreBoard();
+  }
+  screenBoard.addEventListener("click", clickHandler);
+  updateScreen();
+  updateScoreBoard();
 })();
