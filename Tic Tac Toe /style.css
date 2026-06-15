@@ -1,0 +1,194 @@
+/* normalize template */
+/* 1. Use a more-intuitive box-sizing model */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* 2. Remove default margin */
+*:not(dialog) {
+  margin: 0;
+}
+
+/* 3. Enable keyword animations */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+
+body {
+  /* 4. Increase line-height */
+  line-height: 1.5;
+  /* 5. Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 6. Improve media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 7. Inherit fonts for form controls */
+input, button, textarea, select {
+  font: inherit;
+}
+
+/* 8. Avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* 9. Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+/*
+  10. Create a root stacking context
+*/
+#root, #__next {
+  isolation: isolate;
+}
+/* css starts here */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f9;
+  color: #333;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 450px;
+  width: 100%;
+}
+
+h1 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.new-game, .new-players {
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin: 5px;
+  width: 80%;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: space-around;
+  background-color: #ecf0f1;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.player-1-card, .player-2-card {
+  flex: 1;
+}
+
+.scoreboard h2 {
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+}
+
+.scoreboard p {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.current-player {
+  width: 100%;
+  margin-top: 10px;
+  border-top: 1px solid #bdc3c7;
+  padding-top: 10px;
+}
+
+.current-player h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.warning p {
+  color: #e74c3c;
+  font-weight: bold;
+  min-height: 20px;
+  margin: 10px 0;
+}
+
+.result p {
+  color: #27ae60;
+  font-size: 1.5rem;
+  font-weight: bold;
+  min-height: 30px;
+  margin: 10px 0;
+}
+
+.board {
+  display: grid;
+  grid-template-rows: repeat(3, 100px);
+  grid-template-columns: repeat(3, 100px);
+  gap: 8px;
+  justify-content: center;
+  background-color: #bdc3c7;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.cell {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.1s;
+}
+
+.cell:hover {
+  background-color: #f8f9fa;
+}
+
+.cell:focus {
+  outline: none;
+}
