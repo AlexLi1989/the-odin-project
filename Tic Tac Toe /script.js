@@ -449,11 +449,11 @@ class GameController {
 
 //update screenController to class
 class ScreenController {
-  //logic instances
+  //instances
   #board;
   #game;
 
-  //dom private properties
+  //dom related private properties
   #screenBoard;
   #player1NameDisplay;
   #player1ScoreDisplay;
@@ -566,3 +566,6 @@ const boardInstance = new GameBoard();
 
 //create controller instance for screen controller
 const gameInstance = new GameController(boardInstance);
+
+//create screen controller instance
+const screenInstance = new ScreenController(boardInstance, gameInstance);
