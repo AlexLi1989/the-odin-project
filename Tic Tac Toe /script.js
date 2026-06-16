@@ -38,10 +38,21 @@ const gameBoard = (function createGameBoard() {
     //so return a copy of the board instead
     return board.map((row) => [...row]);
   }
+
+  //method to reset board
+  function resetBoard() {
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        board[i][j] = "";
+      }
+    }
+  }
+
   return {
     placeMark,
     printBoard,
     getBoardState,
+    resetBoard,
   };
 })();
 
@@ -56,6 +67,9 @@ function createPlayer(name, mark) {
     },
     incrementScore: function () {
       score++;
+    },
+    resetScore: function () {
+      score = 0;
     },
   };
 }
@@ -130,7 +144,7 @@ const gameController = (function createController() {
     const currentBoard = gameBoard.getBoardState();
     //check if game over or not
     if (isGameOver) {
-      return console.log("Game over!");
+      return "Game over!";
     }
 
     //if cell is empty, allows placement
@@ -139,21 +153,44 @@ const gameController = (function createController() {
       gameBoard.printBoard();
       if (isWon()) {
         isGameOver = true;
-        return console.log(currentPlayer.name + " wins!");
-      } else if (!currentBoard.flat().includes("")) //tie condition
+        currentPlayer.incrementScore();
+        return `${currentPlayer.name} wins!`;
+      }
+      const updatedBoard = gameBoard.getBoardState();
+      if (!updatedBoard.flat().includes("")) //tie condition
       {
         isGameOver = true;
-        return console.log("It's a tie!");
+        return "It's a tie!";
       }
       switchPlayer();
+      return "proceed";
     } else {
-      console.log("Cell already occupied. Please choose another cell.");
+      return "Cell already occupied. Please choose another cell.";
     }
   }
+
+  //method for resetting the game
+  function resetGame() {
+    gameBoard.resetBoard();
+    gameBoard.printBoard();
+    isGameOver = false;
+  }
+
+  //method for changing players name according to input
+  function changeName(name1, name2) {
+    player1.name = name1 === "" ? "Player 1" : name1;
+    player2.name = name2 === "" ? "Player 2" : name2;
+    player1.resetScore();
+    player2.resetScore();
+    resetGame();
+  }
+
   return {
     playRound,
     getPlayers,
     getCurrentPlayer,
+    resetGame,
+    changeName,
   };
 })();
 
@@ -169,6 +206,10 @@ const screenController = (function createScreenController() {
   );
   const warning = document.querySelector(".warning p");
   const result = document.querySelector(".result p");
+  const newGameButton = document.querySelector(".new-game-btn");
+  const newPlayerButton = document.querySelector(".new-players-btn");
+  const player1Input = document.querySelector("#player-1");
+  const player2Input = document.querySelector("#player-2");
 
   //method to update score board
   function updateScoreBoard() {
@@ -202,11 +243,47 @@ const screenController = (function createScreenController() {
     const col = parseInt(clickedCell.dataset.col);
 
     //run play round method
-    gameController.playRound(row, col);
+    let output = gameController.playRound(row, col);
+    warning.textContent = ""; // clear messages
+    result.textContent = "";
+    updateScreen(); // update first
+    updateScoreBoard();
+    if (output === "proceed") {
+      return;
+    } else if (
+      output === "Cell already occupied. Please choose another cell."
+    ) {
+      warning.textContent = output;
+      return;
+    } else {
+      result.textContent = output;
+      return;
+    }
+  }
+
+  //method for new game
+  function newGame() {
+    gameController.resetGame();
+    warning.textContent = ""; // clear messages
+    result.textContent = "";
     updateScreen();
     updateScoreBoard();
   }
+
+  //method for changing player names
+  function changePlayerNames() {
+    gameController.changeName(player1Input.value, player2Input.value);
+    player1Input.value = ""; // clear inputs
+    player2Input.value = "";
+    warning.textContent = ""; // clear messages
+    result.textContent = "";
+    updateScreen();
+    updateScoreBoard();
+  }
+
   screenBoard.addEventListener("click", clickHandler);
+  newGameButton.addEventListener("click", newGame);
+  newPlayerButton.addEventListener("click", changePlayerNames);
   updateScreen();
   updateScoreBoard();
 })();
