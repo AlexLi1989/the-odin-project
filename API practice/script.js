@@ -15,21 +15,21 @@ const message = document.querySelector(".message");
 //   .catch(function (error) {
 //     console.error(error);
 //   });
+
 // converting to async await
 async function getCats() {
-  fetch(
-    "https://api.giphy.com/v1/gifs/translate?api_key=JnggetAr2IvmYp4C3Ze9OpUDfBS5g5NQ&s=cats",
-  )
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (response) {
-      img.src = response.data.images.original.url;
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+  try {
+    const response = await fetch(
+      "https://api.giphy.com/v1/gifs/translate?api_key=JnggetAr2IvmYp4C3Ze9OpUDfBS5g5NQ&s=cats",
+    );
+    const catData = await response.json();
+    img.src = catData.data.images.original.url;
+  } catch (error) {
+    console.error(error);
+  }
 }
+getCats();
+
 button.addEventListener("click", function () {
   fetch(
     "https://api.giphy.com/v1/gifs/translate?api_key=JnggetAr2IvmYp4C3Ze9OpUDfBS5g5NQ&s=cats",
@@ -41,6 +41,7 @@ button.addEventListener("click", function () {
       img.src = response.data.images.original.url;
     });
 });
+
 searchButton.addEventListener("click", function () {
   fetch(
     `https://api.giphy.com/v1/gifs/translate?api_key=JnggetAr2IvmYp4C3Ze9OpUDfBS5g5NQ&s=${searchInput.value}`,
