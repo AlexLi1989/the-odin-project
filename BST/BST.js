@@ -128,13 +128,227 @@ function tree(arr) {
       }
     }
   }
+  //function that traverse the tree in breadth-first level order and call the callback on each value
+  function levelOrderForEach(callback) {
+    if (callback === undefined) {
+      throw new Error("Callback must be provided");
+    }
+    if (root === null) return;
+    let queue = [root];
+    let pointer = 0; // a pointer to prevent using .shift()
+    while (pointer < queue.length) {
+      //dequeue the first node in the queue
+      let current = queue[pointer];
+      pointer++;
+      //call the callback on the node's data
+      callback(current.data);
+      //enqueue left and/or right child of the node
+      if (current.left !== null) queue.push(current.left);
+      if (current.right !== null) queue.push(current.right);
+    }
+    /* ----------------------------------------------------
+    recursive version
+    function recursiveBFS(q, p) {
+    if (p >= q.length) return;
+    let current = q[p];
+    callback(current.data);
+    if (current.left !== null) q.push(current.left);
+    if (current.right !== null) q.push(current.right);
+    recursiveBFS(q, p + 1);
+  }
+  recursiveBFS([root], 0);
+  ---------------------------------------------------- */
+  }
+  //function for depth first, pre in post order traverse callback
+  function preOrderForEach(callback) {
+    if (callback === undefined) {
+      throw new Error("Callback must be provided");
+    }
+    if (root === null) return;
+    //recursive helper for pre order (root,left,right)
+    function traverse(node) {
+      if (node === null) return;
+      callback(node.data);
+      traverse(node.left);
+      traverse(node.right);
+    }
+    traverse(root);
+  }
+  function inOrderForEach(callback) {
+    if (callback === undefined) {
+      throw new Error("Callback must be provided");
+    }
+    if (root === null) return;
+    //recursive helper for in order (left,root,right)
+    function traverse(node) {
+      if (node === null) return;
+      traverse(node.left);
+      callback(node.data);
+      traverse(node.right);
+    }
+    traverse(root);
+  }
+  function postOrderForEach(callback) {
+    if (callback === undefined) {
+      throw new Error("Callback must be provided");
+    }
+    if (root === null) return;
+    //recursive helper for post order (left,right,root)
+    function traverse(node) {
+      if (node === null) return;
+      traverse(node.left);
+      traverse(node.right);
+      callback(node.data);
+    }
+    traverse(root);
+  }
+
+  //recursive helper function for calculating height
+  function calculateHeight(node) {
+    //base case
+    if (node === null) {
+      return -1;
+    }
+    //recursive case
+    return (
+      1 + Math.max(calculateHeight(node.left), calculateHeight(node.right))
+    );
+  }
+  function height(value) {
+    if (value === undefined) throw new Error("Value is required");
+    if (!includes(value)) return undefined;
+    //find target first
+    let current = root;
+    while (current !== null) {
+      if (current.data == value) break;
+      if (current.data > value) current = current.left;
+      else current = current.right;
+    }
+    return calculateHeight(current);
+  }
+  function depth(value) {
+    if (value === undefined) throw new Error("Value is required");
+    if (!includes(value)) return undefined;
+    //find target first and record distance
+    let current = root;
+    let distance = 0;
+    while (current !== null) {
+      if (current.data == value) return distance;
+      if (current.data > value) {
+        current = current.left;
+        distance++;
+      } else {
+        current = current.right;
+        distance++;
+      }
+    }
+  }
+  function isBalanced(node = root) {
+    //base case
+    if (node === null) return true;
+    //get left and right height
+    let leftHeight = calculateHeight(node.left);
+    let rightHeight = calculateHeight(node.right);
+    //check if current node is balanced or not
+    if (Math.abs(leftHeight - rightHeight) > 1) {
+      return false;
+    }
+    //check if any child is balanced or not
+    return isBalanced(node.left) && isBalanced(node.right);
+  }
+  function rebalance() {
+    if (isBalanced(root) !== false) return;
+    let newArray = [];
+    inOrderForEach((value) => {
+      newArray.push(value);
+    });
+    root = buildTree(newArray);
+  }
   return {
     root,
     prettyPrint,
     includes,
     insert,
     deleteItem,
+    levelOrderForEach,
+    height,
+    depth,
+    isBalanced,
+    rebalance,
+    preOrderForEach,
+    inOrderForEach,
+    postOrderForEach,
   };
 }
-const test = tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-console.log(test.prettyPrint());
+
+//driver script by AI
+function generateRandomArray() {
+  const set = new Set();
+  while (set.size < 10) {
+    const randomNum = Math.floor(Math.random() * 101);
+    set.add(randomNum);
+  }
+  return [...set];
+}
+
+const randomData = generateRandomArray();
+console.log("=== 1 ===");
+console.log(randomData);
+
+const bst = tree(randomData);
+console.log("\n=== 2 ===");
+bst.prettyPrint();
+
+console.log("\n=== 3 ===");
+console.log("Balanced:", bst.isBalanced());
+
+console.log("\n=== 4 ===");
+let levelOrderResult = [];
+bst.levelOrderForEach((val) => levelOrderResult.push(val));
+console.log("Level:", levelOrderResult);
+
+let preOrderResult = [];
+bst.preOrderForEach((val) => preOrderResult.push(val));
+console.log("Pre:", preOrderResult);
+
+let inOrderResult = [];
+bst.inOrderForEach((val) => inOrderResult.push(val));
+console.log("In:", inOrderResult);
+
+let postOrderResult = [];
+bst.postOrderForEach((val) => postOrderResult.push(val));
+console.log("Post:", postOrderResult);
+
+console.log("\n=== 5 ===");
+bst.insert(150);
+bst.insert(200);
+bst.insert(250);
+bst.insert(300);
+bst.prettyPrint();
+
+console.log("\n=== 6 ===");
+console.log("Balanced:", bst.isBalanced());
+
+console.log("\n=== 7 ===");
+bst.rebalance();
+bst.prettyPrint();
+
+console.log("\n=== 8 ===");
+console.log("Balanced:", bst.isBalanced());
+
+console.log("\n=== 9 ===");
+levelOrderResult = [];
+bst.levelOrderForEach((val) => levelOrderResult.push(val));
+console.log("Level:", levelOrderResult);
+
+preOrderResult = [];
+bst.preOrderForEach((val) => preOrderResult.push(val));
+console.log("Pre:", preOrderResult);
+
+inOrderResult = [];
+bst.inOrderForEach((val) => inOrderResult.push(val));
+console.log("In:", inOrderResult);
+
+postOrderResult = [];
+bst.postOrderForEach((val) => postOrderResult.push(val));
+console.log("Post:", postOrderResult);
