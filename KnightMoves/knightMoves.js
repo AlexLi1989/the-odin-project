@@ -38,12 +38,14 @@ function knightMoves(start, end) {
     visited.add(JSON.stringify(current[0]));
     //check if end position is reached
     if (current[0][0] === end[0] && current[0][1] === end[1]) {
-      return current[1];
+      return console.log(
+        `You made it in ${current[1].length} moves! Here's your path: ${current[1]}`,
+      );
     }
     //call possibleMoves and enqueue them
     let moves = possibleMoves(current[0][0], current[0][1]);
     for (let i = 0; i < moves.length; i++) {
-      if (moves[i] !== null) {
+      if (moves[i] !== null && !visited.has(JSON.stringify(moves[i]))) {
         queue.push([moves[i], [...current[1], moves[i]]]);
       }
     }
@@ -51,3 +53,5 @@ function knightMoves(start, end) {
     pointer++;
   }
 }
+//driver scripts
+knightMoves([3, 3], [4, 3]);
